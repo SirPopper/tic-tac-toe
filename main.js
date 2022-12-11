@@ -1,6 +1,8 @@
 //gameboard Module
 const gameboard = (() => {
   console.log("gameboard module is running");
+
+  //win combinations
   const winCombos = [
     [1, 2, 3],
     [4, 5, 6],
@@ -38,11 +40,12 @@ const gameboard = (() => {
     //checks for each combo if the playerArray has all entries
     for (let [index, combo] of winCombos.entries()) {
       if (combo.every((elem) => player.playerArray.indexOf(elem) > -1)) {
-        winGame = true;
         player.won = true;
+        winGame = true;
 
-        //show win modal
+        //how win modal
         displayController.wonModal(player);
+
         //show button
         displayController.playAgain();
 
@@ -52,6 +55,7 @@ const gameboard = (() => {
         console.log(`${player.name} won`);
       }
     }
+
     return { winGame, player };
   };
 
@@ -105,6 +109,10 @@ const gameboard = (() => {
         checkWin(player1);
         checkWin(player2);
 
+        //increase count of turn
+        turnCounter++;
+        console.log(turnCounter);
+
         //console logging
         if (winGame == true && player1.won == true) {
           console.log(`${player1.name} won`);
@@ -115,18 +123,30 @@ const gameboard = (() => {
     });
   })();
 
-  return { player1, player2, winGame };
+  return { player1, player2, winGame, turnCounter };
 })();
 
 //display controller
 const displayController = (() => {
   //play again button
-  const playAgain = () => {
+  const playAgain = (player1, player2) => {
     const div = document.createElement("div");
     div.classList.add("btn-again");
     div.textContent = "Play again";
+    document.querySelector("body").appendChild(div);
+  };
+
+  //draw modal
+  const drawModal = () => {
+    const div = document.createElement("div");
+    div.classList.add("won");
+    div.textContent = "Draw!";
 
     document.querySelector("body").appendChild(div);
+
+    //add shade to gameBoard
+    const td = document.querySelectorAll("td");
+    td.forEach((td) => td.classList.add("game-won"));
   };
 
   //won modal
@@ -159,5 +179,5 @@ const displayController = (() => {
       cell.classList.remove("game-won");
     });
   };
-  return { resetBoard, wonModal, playAgain };
+  return { resetBoard, drawModal, wonModal, playAgain };
 })();
