@@ -69,6 +69,9 @@ const gameboard = (() => {
     player2.won = false;
     player2.turn = true;
 
+    turnCounter = 0;
+    winGame = false;
+
     //resetUI
     const btnAgain = document.querySelector(".btn-again");
 
@@ -136,7 +139,7 @@ const displayController = (() => {
     document.querySelector("body").appendChild(div);
   };
 
-  //draw modal
+  //draw modal -> need to implement draw logic
   const drawModal = () => {
     const div = document.createElement("div");
     div.classList.add("won");
