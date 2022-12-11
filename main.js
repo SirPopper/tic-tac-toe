@@ -17,10 +17,9 @@ const gameboard = (() => {
   //create playerFactory with own Array
   const playerFactory = (name, mark) => {
     const playerArray = [];
-    const printArray = () => console.log(playerArray);
     const turn = true;
     const won = false;
-    return { name, playerArray, printArray, turn, mark, won };
+    return { name, playerArray, turn, mark, won };
   };
 
   //created Player 1
@@ -43,7 +42,7 @@ const gameboard = (() => {
         player.won = true;
         winGame = true;
 
-        //how win modal
+        //show win modal
         displayController.wonModal(player);
 
         //show button
@@ -61,14 +60,17 @@ const gameboard = (() => {
 
   //reset game
   const resetGame = () => {
+    //reset player1
     player1.playerArray = [];
     player1.won = false;
     player1.turn = true;
 
+    //reset player2
     player2.playerArray = [];
     player2.won = false;
     player2.turn = true;
 
+    //reset game stats
     turnCounter = 0;
     winGame = false;
 
@@ -89,8 +91,23 @@ const gameboard = (() => {
     //turns logic
     marker.forEach((cell) => {
       cell.addEventListener("click", () => {
+        //increase count of turn
+        turnCounter++;
+        console.log(turnCounter);
         //player 1 turn
-        if (player1.turn == true && cell.textContent === "") {
+        if (turnCounter == 9) {
+          console.log("draw");
+          turnCounter = 0;
+
+          //show win modal
+          displayController.drawModal();
+
+          //show button
+          displayController.playAgain();
+
+          //resetting GameStats and UI
+          resetGame();
+        } else if (player1.turn == true && cell.textContent === "") {
           //push choice to player 1 array and mark board
           player1.playerArray.push(Number(cell.id));
           cell.textContent = player1.mark;
@@ -98,6 +115,9 @@ const gameboard = (() => {
           //change turn
           player1.turn = false;
           player2.turn = true;
+
+          checkWin(player1);
+          checkWin(player2);
         } //player 2 turn
         else if (player2.turn == true && cell.textContent === "") {
           //push choice to player 2 array and mark board
@@ -107,14 +127,10 @@ const gameboard = (() => {
           //change turn
           player1.turn = true;
           player2.turn = false;
+
+          checkWin(player1);
+          checkWin(player2);
         }
-
-        checkWin(player1);
-        checkWin(player2);
-
-        //increase count of turn
-        turnCounter++;
-        console.log(turnCounter);
 
         //console logging
         if (winGame == true && player1.won == true) {
