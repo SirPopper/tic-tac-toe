@@ -29,8 +29,8 @@ const gameboard = (() => {
   let turnCounter = 0;
   let winGame = false;
 
-  //chcks for winner
-  const win = (player) => {
+  //checks for winner
+  const checkWin = (player) => {
     //sort player arrays
     player.playerArray.sort((a, b) => a - b);
 
@@ -50,8 +50,7 @@ const gameboard = (() => {
     //turns logic
     marker.forEach((cell) => {
       cell.addEventListener("click", () => {
-        turnCounter++;
-
+        //player 1 turn
         if (player1.turn == true && cell.textContent === "") {
           //push choice to player 1 array and mark board
           player1.playerArray.push(Number(cell.id));
@@ -60,7 +59,8 @@ const gameboard = (() => {
           //change turn
           player1.turn = false;
           player2.turn = true;
-        } else if (player2.turn == true && cell.textContent === "") {
+        } //player 2 turn
+        else if (player2.turn == true && cell.textContent === "") {
           //push choice to player 2 array and mark board
           player2.playerArray.push(Number(cell.id));
           cell.textContent = player2.mark;
@@ -70,11 +70,11 @@ const gameboard = (() => {
           player2.turn = false;
         }
 
-        win(player1);
-        win(player2);
+        checkWin(player1);
+        checkWin(player2);
       });
     });
   })();
 
-  return { player1, player2 };
+  return { player1, player2, winGame };
 })();
