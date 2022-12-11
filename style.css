@@ -1,13 +1,82 @@
+:root {
+  --color-game: 3px solid rgb(205, 205, 205);
+}
+
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* header */
+.header {
+  display: flex;
+  justify-content: center;
+  margin: 30px;
+  font-size: xx-large;
+  font-weight: 600;
+}
+
+/* table */
+
 table {
   display: flex;
   justify-content: center;
+  border: none;
 }
 
 td {
-  border: 1px solid black;
   height: 150px;
   width: 150px;
 
   text-align: center;
   font-size: 30px;
+}
+
+/* creates opacity when game was won  */
+.game-won {
+  opacity: 0.5;
+}
+
+.board-outlineA {
+  border-left: var(--color-game);
+  border-right: var(--color-game);
+}
+
+.board-outlineB {
+  border-top: var(--color-game);
+  border-bottom: var(--color-game);
+}
+
+/* shows who is the winner */
+.won {
+  display: flex;
+
+  margin-top: 50px;
+  justify-content: center;
+  font-weight: 800;
+  font-size: xx-large;
+}
+
+/* btn-play again */
+.btn-again {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-inline: auto;
+  margin-top: 20px;
+
+  background-color: beige;
+  border: 3px solid rgb(220, 220, 198);
+  border-radius: 20px;
+  width: 200px;
+  height: 50px;
+}
+
+.btn-again:hover {
+  background-color: rgb(225, 225, 199);
+  cursor: pointer;
+}
+
+.btn-again:active {
+  border: 3px solid rgb(176, 176, 155);
 }

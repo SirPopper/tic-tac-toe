@@ -17,14 +17,15 @@ const gameboard = (() => {
     const playerArray = [];
     const printArray = () => console.log(playerArray);
     const turn = true;
-    return { name, playerArray, printArray, turn, mark };
+    const won = false;
+    return { name, playerArray, printArray, turn, mark, won };
   };
 
   //created Player 1
-  const player1 = playerFactory("player1", "x");
+  let player1 = playerFactory("player1", "x");
 
   //created Player 2
-  const player2 = playerFactory("player2", "o");
+  let player2 = playerFactory("player2", "o");
 
   let turnCounter = 0;
   let winGame = false;
@@ -38,9 +39,40 @@ const gameboard = (() => {
     for (let [index, combo] of winCombos.entries()) {
       if (combo.every((elem) => player.playerArray.indexOf(elem) > -1)) {
         winGame = true;
+        player.won = true;
+
+        //show win modal
+        displayController.wonModal(player);
+        //show button
+        displayController.playAgain();
+
+        //resetting GameStats and UI
+        resetGame();
+
         console.log(`${player.name} won`);
       }
     }
+    return { winGame, player };
+  };
+
+  //reset game
+  const resetGame = () => {
+    player1.playerArray = [];
+    player1.won = false;
+    player1.turn = true;
+
+    player2.playerArray = [];
+    player2.won = false;
+    player2.turn = true;
+
+    //resetUI
+    const btnAgain = document.querySelector(".btn-again");
+
+    btnAgain.addEventListener("click", () => {
+      displayController.resetBoard();
+    });
+
+    return { player1, player2 };
   };
 
   //add mark on display and save mark in player array as module
@@ -72,9 +104,60 @@ const gameboard = (() => {
 
         checkWin(player1);
         checkWin(player2);
+
+        //console logging
+        if (winGame == true && player1.won == true) {
+          console.log(`${player1.name} won`);
+        } else if (winGame == true && player2.won == true) {
+          console.log(`${player2.name} won`);
+        }
       });
     });
   })();
 
   return { player1, player2, winGame };
+})();
+
+//display controller
+const displayController = (() => {
+  //play again button
+  const playAgain = () => {
+    const div = document.createElement("div");
+    div.classList.add("btn-again");
+    div.textContent = "Play again";
+
+    document.querySelector("body").appendChild(div);
+  };
+
+  //won modal
+  const wonModal = (player) => {
+    const div = document.createElement("div");
+    div.classList.add("won");
+    div.textContent = `${player.name} won!`;
+
+    document.querySelector("body").appendChild(div);
+
+    //add shade to gameBoard
+    const td = document.querySelectorAll("td");
+    td.forEach((td) => td.classList.add("game-won"));
+  };
+
+  //reset UI
+  const resetBoard = () => {
+    //remove won modal
+    const div = document.querySelector(".won");
+    document.querySelector("body").removeChild(div);
+
+    //remove button
+    const btnAgain = document.querySelector(".btn-again");
+    document.querySelector("body").removeChild(btnAgain);
+
+    //remove gameUI
+    const boardTable = document.querySelectorAll("td");
+    boardTable.forEach((cell) => {
+      cell.textContent = "";
+      cell.classList.remove("game-won");
+    });
+  };
+  return { resetBoard, wonModal, playAgain };
 })();
